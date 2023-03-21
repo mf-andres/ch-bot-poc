@@ -27,6 +27,11 @@ def league_send_day():
     for pair in group_pairs:
         message += f"{pair[0]} VS {pair[1]}\n"
 
+    send_to_telegram(message)
+    send_to_rocketchat(message)
+
+
+def send_to_telegram(message: str):
     url = f"https://api.telegram.org/bot{settings.telegram_token}/sendMessage"
     json_ = {
         "chat_id": "506901938",
@@ -36,6 +41,29 @@ def league_send_day():
         url=url,
         json=json_,
     )
+
+
+def send_to_rocketchat(message):
+    # Set the URL
+    url = "https://rocketchat.gradiant.org/api/v1/chat.postMessage"
+
+    # Set the payload
+    group_id = "8xwk9gMLK5ufLsDDk"
+    payload = {
+        "channel": group_id,
+        "text": message
+    }
+
+    # Set the headers
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": settings.rocketchat_token,
+        "X-User-Id": "4AB8ptpQhgxoMdDmo"
+    }
+
+    # Send the POST request to the Rocket Chat API
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.status_code)
 
 
 @app.command()

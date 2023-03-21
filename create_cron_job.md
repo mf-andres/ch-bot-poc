@@ -1,15 +1,13 @@
 To run the bot:
 
-Install fcron
-
 Modify your tab via:
 
 ```commandline
-fcrontab -e
+crontab -e
 ```
 
 Add the following line
 
 ```
-30 8 * * 1 ~/Proyectos/chuinibot/run_chuinibot_league.sh
+45 9 * * 1 ~/Proyectos/chuinibot/run_chuinibot_league.sh
 ```

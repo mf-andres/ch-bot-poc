@@ -1,2 +1,2 @@
 1. Create .env (follow settings.py)
-2. Follow create_fcron_job.md
+2. Follow create_cron_job.md

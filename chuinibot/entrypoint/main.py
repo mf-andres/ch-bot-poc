@@ -1,4 +1,5 @@
 from typing import List
+from urllib import parse
 
 import pyleague
 import requests
@@ -67,10 +68,37 @@ def send_to_rocketchat(message):
 
 
 @app.command()
-def wikipedia():
-    # get info
-    # send message
-    pass
+def send_random_wikipedia_articles():
+    links = get_links_from_wikipedia()
+    message = "Wikipedia Links:\n\n"
+    for i, link in enumerate(links):
+        message += f"{i} - {link}\n"
+    send_to_telegram(message)
+
+
+def get_links_from_wikipedia():
+    url = "https://en.wikipedia.org/w/api.php"
+    params = {
+        "action": "query",
+        "format": "json",
+        "list": "random",
+        "rnlimit": 5,  # Number of random pages to retrieve
+        "rnnamespace": 0,  # Only retrieve pages in the main namespace
+    }
+    # Send the request to the API and retrieve the response
+    response = requests.get(url, params=params)
+    # Parse the JSON data and extract the page titles
+    data = response.json()
+    pages = data["query"]["random"]
+    # Print the page titles and links
+    links = list()
+    for page in pages:
+        title = page["title"]
+        title = parse.quote(title)
+        link = f"https://en.wikipedia.org/wiki/{title}"
+        links.append(link)
+        print(f"{title}: {link}")
+    return links
 
 
 if __name__ == '__main__':
